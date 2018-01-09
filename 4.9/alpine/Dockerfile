@@ -28,14 +28,14 @@ RUN apk add --no-cache --virtual .wp-php-extensions \
 
 COPY files/content /var/www/content
 COPY files/wp-config.php /var/www/wp-config.php
-COPY files/.gitignore /var/www/.gitignore
 COPY files/docker-wp-entrypoint.sh /usr/local/bin/
 
 RUN chown -R www-data:www-data . \
   && find . -type f -exec chmod 644 -- {} + \
   && find . -type d -exec chmod 755 -- {} + \
 	&& chmod 644 ./wp-config.php \
-	&& rm -rf /var/www/html
+	&& rm -rf /var/www/html \
+  && chmod +x /usr/local/bin/docker-wp-entrypoint.sh
 
 VOLUME /var/www/
 
