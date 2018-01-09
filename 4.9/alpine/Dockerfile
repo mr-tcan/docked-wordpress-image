@@ -1,4 +1,4 @@
-FROM dockium/php:7.1.12_1
+FROM dockium/php:7.1.12_1-alpine
 
 RUN apk add --no-cache --virtual .persistent-deps \
   curl \
