@@ -5,7 +5,7 @@ NAMESPACE = dockium
 # WordPress version
 VERSION = 4.9.1
 # Docker image revision
-REVISION = 1
+REVISION = 2
 
 # Build steps
 all: 4-9

@@ -26,19 +26,18 @@ RUN apk add --no-cache --virtual .wp-php-extensions \
 	php7-redis \
 	php7-soap
 
-COPY files/wp-content /var/www/wp-content
+COPY files/content /var/www/content
 COPY files/wp-config.php /var/www/wp-config.php
 COPY files/.gitignore /var/www/.gitignore
+COPY files/docker-wp-entrypoint.sh /usr/local/bin/
 
 RUN chown -R www-data:www-data . \
   && find . -type f -exec chmod 644 -- {} + \
   && find . -type d -exec chmod 755 -- {} + \
-	&& chmod 444 ./wp-config.php \
+	&& chmod 644 ./wp-config.php \
 	&& rm -rf /var/www/html
 
 VOLUME /var/www/
-
-COPY files/docker-wp-entrypoint.sh /usr/local/bin/
 
 ENTRYPOINT ["docker-wp-entrypoint.sh"]
 
