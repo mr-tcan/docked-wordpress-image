@@ -1,8 +1,9 @@
-FROM dockium/php:7.1.13_0
+FROM dockium/php:7.1.13_1
 
 RUN apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
       git \
+      openssh-client \
       tar; \
     rm -rf /var/lib/apt/lists/*
 
