@@ -12,7 +12,7 @@ RUN apt-get update; \
 ARG WORDPRESS_VERSION=4.9.1
 ARG WORDPRESS_SHA1=892d2c23b9d458ec3d44de59b753adb41012e903
 
-ARG APP_ROOT=/var/www/app
+ARG APP_ROOT=/var/www/
 
 WORKDIR ${APP_ROOT}
 
@@ -23,7 +23,6 @@ RUN set -ex; \
     tar -xzf wordpress.tar.gz -C ${APP_ROOT}/; \
     rm wordpress.tar.gz;
 
-#COPY files/wp-content ${APP_ROOT}/wp-content
 COPY files/wp-config.php ${APP_ROOT}/wp-config.php
 COPY files/docker-wp-entrypoint.sh /usr/local/bin/
 
@@ -31,11 +30,10 @@ RUN set -ex; \
     chown -R www-data:www-data .; \
     find . -type f -exec chmod 644 -- {} +; \
     find . -type d -exec chmod 755 -- {} +; \
-	  chmod 644 ./wp-config.php; \
 	  rm -rf /var/www/html; \
     chmod +x /usr/local/bin/docker-wp-entrypoint.sh
 
-VOLUME /var/www/app/wordpress
+VOLUME /var/www/wordpress
 
 ENTRYPOINT ["docker-wp-entrypoint.sh"]
 
