@@ -14,14 +14,12 @@
  * @package WordPress
  */
 
-/**
-  * Don't edit this file directly, instead, create a wp-config-override.php
-  * file and add your settings and defines in there. This file contains the
-  * production settings
-*/
-if ( file_exists( dirname( __FILE__ ) . '/wp-config-override.php' ) ) {
-  include( dirname( __FILE__ ) . '/wp-config-override.php' );
-}
+ /**
+   * Don't edit this file directly, instead, use environment variables to
+   * define your settings. If you need add some settings, create a
+   * wp-config-override.php file and add your settings and defines in there.
+   * This file contains production settings.
+ */
 
 
 /**
@@ -104,14 +102,17 @@ if ( defined( 'WP_CONTENT_CUSTOM' ) ) {
   define( 'WP_CONTENT_URL', WP_HOME . '/' . basename( WP_CONTENT_CUSTOM ) );
 }
 
-// Set path to MU Plugins.
-//defined( 'WPMU_PLUGIN_DIR' ) or define( 'WPMU_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins-mu' );
-//defined( 'WPMU_PLUGIN_URL' ) or define( 'WPMU_PLUGIN_URL', WP_CONTENT_URL . '/plugins-mu' );
-
 /** A couple extra tweaks for HTTPS **/
 // You need to alert Wordpress if you're behind a proxy server and using HTTPS
 if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
 	$_SERVER['HTTPS'] = 'on';
+}
+
+/**
+  * Define your custom settings in this file
+  */
+if ( file_exists( dirname( __FILE__ ) . '/wp-config-override.php' ) ) {
+  include( dirname( __FILE__ ) . '/wp-config-override.php' );
 }
 
 /**
