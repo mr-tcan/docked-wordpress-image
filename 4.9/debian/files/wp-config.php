@@ -2,10 +2,6 @@
 /**
  * The base configuration for WordPress
  *
- * The wp-config.php creation script uses this file during the
- * installation. You don't have to use the web site, you can
- * copy this file to "wp-config.php" and fill in the values.
- *
  * This file contains the following configurations:
  *
  * * MySQL settings
@@ -18,30 +14,31 @@
  * @package WordPress
  */
 
-
 /**
-  * Don't edit this file directly, instead, create a local-config.php file and
-  * add your database settings and defines in there. This file contains the
+  * Don't edit this file directly, instead, create a wp-config-override.php
+  * file and add your settings and defines in there. This file contains the
   * production settings
 */
-if ( file_exists( dirname( __FILE__ ) . '/wp-config-local.php' ) ) {
-  include( dirname( __FILE__ ) . '/wp-config-local.php' );
+if ( file_exists( dirname( __FILE__ ) . '/wp-config-override.php' ) ) {
+  include( dirname( __FILE__ ) . '/wp-config-override.php' );
 }
 
 
- // ** MySQL settings  ** //
- /** The name of the database for WordPress */
- define( 'DB_NAME', getenv( 'WORDPRESS_DB_NAME' ) );
-  /** MySQL database username */
- define( 'DB_USER', getenv( 'WORDPRESS_DB_USER' ) );
- /** MySQL database password */
- define( 'DB_PASSWORD', getenv( 'WORDPRESS_DB_PASSWORD' ) );
-  /** MySQL hostname; on Pantheon this includes a specific port number. */
- define( 'DB_HOST', getenv( 'WORDPRESS_DB_HOST' ) . ':' . getenv( 'WORDPRESS_DB_PORT' ) );
- /** Database Charset to use in creating database tables. */
- define('DB_CHARSET', 'utf8');
- /** The Database Collate type. Don't change this if in doubt. */
- define('DB_COLLATE', '');
+/**
+  * MySQL settings:
+  * DB_NAME: the name of the database for WordPress
+  * DB_USER: MySQL database username
+  * DB_PASSWORD: MySQL database password
+  * DB_HOST: MySQL hostname with a specific port number WP_DB_PORT
+  * DB_CHARSET: Database Charset to use in creating database tables
+  * DB_COLLATE: The Database Collate type. Don't change this if in doubt
+  */
+ define( 'DB_NAME', getenv( 'WP_DB_NAME' ) );
+ define( 'DB_USER', getenv( 'WP_DB_USER' ) );
+ define( 'DB_PASSWORD', getenv( 'WP_DB_PASSWORD' ) );
+ define( 'DB_HOST', getenv( 'WP_DB_HOST' ) . ':' . getenv( 'WP_DB_PORT' ) );
+ define( 'DB_CHARSET', 'utf8' );
+ define( 'DB_COLLATE', '' );
 
  /**#@+
   * Authentication Unique Keys and Salts.
@@ -61,7 +58,6 @@ define( 'SECURE_AUTH_SALT', getenv( 'WP_SECURE_AUTH_SALT' ) );
 define( 'LOGGED_IN_SALT',   getenv( 'WP_LOGGED_IN_SALT' ) );
 define( 'NONCE_SALT',       getenv( 'WP_NONCE_SALT' ) );
  /**#@-*/
-
 /**
  * WordPress Database Table prefix.
  *
@@ -99,12 +95,18 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
 }
 
 // Define path & url for Content
-define( 'WP_CONTENT_DIR', dirname( __FILE__ ) . '/content' );
-define( 'WP_CONTENT_URL', WP_HOME . '/content' );
+if ( ! empty( getenv( 'WP_CONTENT_CUSTOM' ) ) ) {
+  define( 'WP_CONTENT_CUSTOM', getenv( 'WP_CONTENT_CUSTOM' ) );
+}
+
+if ( defined( 'WP_CONTENT_CUSTOM' ) ) {
+  define( 'WP_CONTENT_DIR', dirname( __FILE__ ) . WP_CONTENT_CUSTOM );
+  define( 'WP_CONTENT_URL', WP_HOME . '/' . basename( WP_CONTENT_CUSTOM ) );
+}
 
 // Set path to MU Plugins.
-define( 'WPMU_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins-mu' );
-define( 'WPMU_PLUGIN_URL', WP_CONTENT_URL . '/plugins-mu' );
+//defined( 'WPMU_PLUGIN_DIR' ) or define( 'WPMU_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins-mu' );
+//defined( 'WPMU_PLUGIN_URL' ) or define( 'WPMU_PLUGIN_URL', WP_CONTENT_URL . '/plugins-mu' );
 
 /** A couple extra tweaks for HTTPS **/
 // You need to alert Wordpress if you're behind a proxy server and using HTTPS
@@ -118,39 +120,44 @@ if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_P
 
 // Define max memory usage for WordPress
 if ( !defined( 'WP_MEMORY_LIMIT' ) ) {
-  define('WP_MEMORY_LIMIT', getenv( 'WP_MEMORY_LIMIT' ) ?? '128M');
+  define( 'WP_MEMORY_LIMIT', getenv( 'WP_MEMORY_LIMIT' ) ?: '128M' );
+}
+
+// Increase memory limite when in the admin area
+if ( !defined( 'WP_MAX_MEMORY_LIMIT' ) ) {
+  define( 'WP_MAX_MEMORY_LIMIT', getenv( 'WP_MAX_MEMORY_LIMIT' ) ?: '256M' );
 }
 
 // Auto save time interval in seconds
 if ( !defined( 'AUTOSAVE_INTERVAL' ) ) {
-  define( 'AUTOSAVE_INTERVAL', getenv( 'WP_AUTOSAVE_INTERVAL' ) ?? 120 );
+  define( 'AUTOSAVE_INTERVAL', getenv( 'WP_AUTOSAVE_INTERVAL' ) ?: 120 );
 }
 
 // Set number of post revisions to prevent cluttering on database
 if ( !defined( 'WP_POST_REVISIONS') ) {
-  define( 'WP_POST_REVISIONS', getenv( 'WP_POST_REVISIONS' ) ?? 3 );
+  define( 'WP_POST_REVISIONS', getenv( 'WP_POST_REVISIONS' ) ?: 3 );
 }
 
 // Automatic trash cleaning
 if ( !defined( 'EMPTY_TRASH_DAYS' ) ) {
-  define( 'EMPTY_TRASH_DAYS', getenv( 'WP_EMPTY_TRASH_DAYS' ) ?? 7 ); // 7 days
+  define( 'EMPTY_TRASH_DAYS', getenv( 'WP_EMPTY_TRASH_DAYS' ) ?: 7 ); // 7 days
 }
 
 // Disable all core updates
 if ( !defined( 'WP_AUTO_UPDATE_CORE') ) {
-  define( 'WP_AUTO_UPDATE_CORE', false );
+  define( 'WP_AUTO_UPDATE_CORE', getenv( 'WP_AUTO_UPDATE_CORE') ?: false );
 }
 
 // Disable plugin and theme edition
 if ( !defined( 'DISALLOW_FILE_EDIT' ) ) {
-  define( 'DISALLOW_FILE_EDIT', true );
+  define( 'DISALLOW_FILE_EDIT', getenv( 'DISALLOW_FILE_EDIT') ?: true );
 }
 
 /**
 * For developers: WordPress debugging mode.
 */
 if ( !defined( 'WP_DEBUG' ) ) {
-  define('WP_DEBUG', false);
+  define( 'WP_DEBUG', getenv( 'WP_DEBUG') ?: false );
 }
 
 /* That's all, stop editing! Happy Pressing. */
