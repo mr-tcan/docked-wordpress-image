@@ -3,9 +3,9 @@
 # Docker Hub user/organization
 NAMESPACE = dockium
 # WordPress version
-VERSION = 4.9.1
+VERSION = 4.9.4
 # Docker image revision
-REVISION = 2
+REVISION = 0
 
 # Build steps
 all: debian
