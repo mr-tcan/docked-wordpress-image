@@ -31,10 +31,10 @@
   * DB_CHARSET: Database Charset to use in creating database tables
   * DB_COLLATE: The Database Collate type. Don't change this if in doubt
   */
- define( 'DB_NAME', getenv( 'WP_DB_NAME' ) );
- define( 'DB_USER', getenv( 'WP_DB_USER' ) );
- define( 'DB_PASSWORD', getenv( 'WP_DB_PASSWORD' ) );
- define( 'DB_HOST', getenv( 'WP_DB_HOST' ) . ':' . getenv( 'WP_DB_PORT' ) );
+ define( 'DB_NAME', getenv( 'WP_DB_NAME' ) ?: 'wordpress');
+ define( 'DB_USER', getenv( 'WP_DB_USER' ) ?: 'wordpress');
+ define( 'DB_PASSWORD', getenv( 'WP_DB_PASSWORD' ) ?: 'wordpress');
+ define( 'DB_HOST', getenv( 'WP_DB_HOST' ) ?: 'database' . ':' . getenv( 'WP_DB_PORT' ) ?: '3306' );
  define( 'DB_CHARSET', 'utf8' );
  define( 'DB_COLLATE', '' );
 
@@ -62,7 +62,7 @@ define( 'NONCE_SALT',       getenv( 'WP_NONCE_SALT' ) );
  * You can have multiple installations in one database if you give each a unique
  * prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix = getenv( 'WP_TABLE_PREFIX' );
+$table_prefix = getenv( 'WP_TABLE_PREFIX' ) ?: 'wp';
 
 /**
  * WordPress Localized Language, defaults to English.
@@ -72,7 +72,7 @@ $table_prefix = getenv( 'WP_TABLE_PREFIX' );
  * de_DE.mo to wp-content/languages and set WPLANG to 'de_DE' to enable German
  * language support.
  */
-define( 'WPLANG', '' );
+define( 'WPLANG', getenv( 'WP_LANG' ) ?: 'en_US' );
 
 
 // Define Site and Home URL with or without SSL
@@ -90,16 +90,6 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
 
   define('WP_HOME', $scheme . '://' . $_SERVER['HTTP_HOST']);
   define('WP_SITEURL', $scheme . '://' . $_SERVER['HTTP_HOST']);
-}
-
-// Define path & url for Content
-if ( ! empty( getenv( 'WP_CONTENT_CUSTOM' ) ) ) {
-  define( 'WP_CONTENT_CUSTOM', getenv( 'WP_CONTENT_CUSTOM' ) );
-}
-
-if ( defined( 'WP_CONTENT_CUSTOM' ) ) {
-  define( 'WP_CONTENT_DIR', dirname( __FILE__ ) . WP_CONTENT_CUSTOM );
-  define( 'WP_CONTENT_URL', WP_HOME . '/' . basename( WP_CONTENT_CUSTOM ) );
 }
 
 /** A couple extra tweaks for HTTPS **/
