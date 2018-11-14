@@ -81,7 +81,10 @@ RUN set -ex; \
     chown -R www-data:www-data /run/php; \
     mkdir /run/nginx; \
     chown -R www-data:www-data /run/nginx; \
-    chmod +x /bin/docker-wp-entrypoint;
+    chmod +x /bin/docker-wp-entrypoint; \
+    chown www-data:www-data /wp-config.php; \
+    chmod 600 /wp-config.php; \
+    mv /wp-config.php /var/www/wordpress/;
 
 VOLUME /var/www/wordpress
 
@@ -90,3 +93,4 @@ EXPOSE 80
 ENTRYPOINT ["/bin/docker-wp-entrypoint"]
 
 CMD ["supervisord", "-c", "/etc/supervisor.conf"]
+
