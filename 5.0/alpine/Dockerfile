@@ -77,10 +77,6 @@ RUN set -ex; \
 COPY docker /
 
 RUN set -ex; \
-    mkdir /run/php/; \
-    chown -R www-data:www-data /run/php; \
-    mkdir /run/nginx; \
-    chown -R www-data:www-data /run/nginx; \
     chmod +x /bin/docker-wp-entrypoint; \
     chown www-data:www-data /wp-config.php; \
     chmod 600 /wp-config.php; \
