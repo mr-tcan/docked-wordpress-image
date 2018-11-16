@@ -20,4 +20,19 @@ fi
 echo "Normalize ownership of /var/www/wordpress"
 chown -R www-data:www-data /var/www/wordpress
 
+if [ ${WP_INSTALL} = true ]; then
+    if ! $(wp core is-installed); then
+        echo "Installing WordPress"
+        gosu www-data wp core install \
+        --url=${WP_SITE_URL:-localhost} \
+        --title=${WP_SITE_TITLE:-WordPress} \
+        --admin_user=${WP_ADMIN_USER:-pressmogul} \
+        --admin_password=${WP_ADMIN_PASSWRD:-pressmogul} \
+        --admin_email=${WP_ADMIN_EMAIL:-dev@pressmogul.com} ;
+        echo "Installation completed"
+    else
+        echo "WordPress is already installed"
+    fi
+fi
+
 exec "$@"
