@@ -26,6 +26,7 @@
 */
 if ( file_exists( dirname( __FILE__ ) . '/wp-config-local.php' ) ) {
   include( dirname( __FILE__ ) . '/wp-config-local.php' );
+  define( 'WP_LOCAL_DEV', true);
 }
 
 
@@ -106,6 +107,11 @@ if ( !defined( 'WP_AUTO_UPDATE_CORE') ) {
 // Disable plugin and theme edition
 if ( !defined( 'DISALLOW_FILE_EDIT' ) ) {
   define( 'DISALLOW_FILE_EDIT', true );
+}
+
+// For Cli compatibility
+if ( ! isset( $_SERVER['HTTP_HOST'] ) ) {
+	$_SERVER['HTTP_HOST'] = getenv( 'WP_SITE_URL' ) ?: 'localhost';
 }
 
 /* That's all, stop editing! Happy Pressing. */
