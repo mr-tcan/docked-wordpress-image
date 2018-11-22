@@ -21,6 +21,10 @@ echo "Normalize ownership of /var/www/wordpress"
 chown -R www-data:www-data /var/www/wordpress
 
 if [ ${WP_INSTALL} = true ]; then
+    until wp db check; do
+        echo "Waiting Database"
+        sleep 2
+    done
     if ! $(wp core is-installed); then
         echo "Installing WordPress"
         gosu www-data wp core install \

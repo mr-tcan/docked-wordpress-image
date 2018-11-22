@@ -20,6 +20,7 @@ RUN set -ex; \
     apk --update add --no-cache \
     ca-certificates \
     curl \
+    mysql-client \
     nginx \
     shadow \
     ssmtp;
