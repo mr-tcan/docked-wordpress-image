@@ -76,29 +76,6 @@ $table_prefix = getenv( 'WP_TABLE_PREFIX' ) ?: 'my';
 define( 'WPLANG', getenv( 'WP_LANG' ) ?: 'en_US' );
 
 
-/** A couple extra tweaks for HTTPS **/
-// You need to alert Wordpress if you're behind a proxy server and using HTTPS
-if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
-	$_SERVER['HTTPS'] = 'on';
-}
-
-// Define Site and Home URL with or without SSL
-if ( isset( $_SERVER['HTTP_HOST'] ) ) {
-  // HTTP is still the default scheme for now.
-  $scheme = 'http';
-  // If we have detected that the end use is HTTPS, make sure we pass that
-  // through here, so <img> tags and the like don't generate mixed-mode
-  // content warnings.
-  if ( $_SERVER['HTTPS'] == 'on' || $_SERVER['REQUEST_SCHEME'] == 'https' ) {
-    $scheme = 'https';
-    // Force SSL on admin
-    define('FORCE_SSL_ADMIN', true);
-  }
-
-  define('WP_HOME', $scheme . '://' . $_SERVER['HTTP_HOST']);
-  define('WP_SITEURL', $scheme . '://' . $_SERVER['HTTP_HOST']);
-}
-
 /* WordPress constants for better performance and security and usability */
 
 // Define max memory usage for WordPress
@@ -129,13 +106,6 @@ if ( !defined( 'WP_AUTO_UPDATE_CORE') ) {
 // Disable plugin and theme edition
 if ( !defined( 'DISALLOW_FILE_EDIT' ) ) {
   define( 'DISALLOW_FILE_EDIT', true );
-}
-
-/**
-* For developers: WordPress debugging mode.
-*/
-if ( !defined( 'WP_DEBUG' ) ) {
-  define( 'WP_DEBUG', false );
 }
 
 /* That's all, stop editing! Happy Pressing. */
