@@ -56,7 +56,7 @@ RUN set -ex; \
     curl -o /usr/local/bin/gosu -L "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64"; \
     chmod +x /usr/local/bin/gosu;
 
-ENV WP_CLI_VERSION=2.0.1
+ENV WP_CLI_VERSION=2.1.0
 ENV WP_CLI_CONFIG_PATH=/usr/local/docker/etc/wp-cli.yaml
 
 RUN set -ex; \
@@ -70,7 +70,7 @@ RUN set -ex; \
 
 WORKDIR /var/www/wordpress
 
-ARG WP_VERSION=nightly
+ARG WP_VERSION=5.0.3
 
 RUN set -ex; \
     gosu www-data wp core download --version=${WP_VERSION};
@@ -90,4 +90,3 @@ EXPOSE 80
 ENTRYPOINT ["/bin/docker-wp-entrypoint"]
 
 CMD ["supervisord", "-c", "/etc/supervisor.conf"]
-
